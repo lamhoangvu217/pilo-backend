@@ -18,7 +18,7 @@ console.log(db);
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3006" || "https://pilo-frontend.vercel.app/",
+  origin: "https://pilo-frontend.netlify.app/",
 };
 
 app.use(cors(corsOptions));
