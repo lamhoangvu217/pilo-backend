@@ -18,7 +18,7 @@ console.log(db);
 const app = express();
 
 var corsOptions = {
-  origin: "https://pilo-frontend.vercel.app/",
+  origin: "https://pilo-frontend.vercel.app",
 };
 
 app.use(cors(corsOptions));
