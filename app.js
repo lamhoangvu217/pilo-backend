@@ -13,12 +13,10 @@ const projectRoutes = require("./app/routes/project.routes");
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 
-console.log(db);
-
 const app = express();
 
 var corsOptions = {
-  origin: "https://pilo-frontend.vercel.app",
+  origin: "http://localhost:3006",
 };
 
 app.use(cors(corsOptions));

@@ -21,9 +21,10 @@ exports.create = async (req, res) => {
     });
     const project = await newProject.save();
     const user = await User.findById(req.user.id);
-    console.log(user);
     user.projects.unshift(project.id);
     await user.save();
+
+    project.members.push({ user: user.id, email: user.email });
     // Save Tutorial in the database
     await project.save();
 
@@ -43,7 +44,6 @@ exports.create = async (req, res) => {
     //     });
     //   });
   } catch (error) {
-    console.error(error);
     res.status(500).send("Server Error");
   }
 };
@@ -57,7 +57,6 @@ exports.findAll = async (req, res) => {
   // console.log(title, condition);
   const user = await User.findById(req.user.id);
   const projects = [];
-  console.log(user);
   for (const projectId of user.projects) {
     projects.push(await Project.findById(projectId));
   }
@@ -77,7 +76,6 @@ exports.findAll = async (req, res) => {
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  console.log(id);
   Project.findById(id)
     .then((data) => {
       if (!data)
@@ -91,14 +89,64 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Delete a Tutorial with the specified id in the request
+exports.delete = async (req, res) => {
+  // const id = req.params.id;
+  // const user = await User.findById(req.user.id);
+  // user.projects.shift(id);
+  // await user.save();
+  // Project.findByIdAndRemove(id)
+  //   .then((data) => {
+  //     if (!data)
+  //       res.status(404).send({ message: "Not found Tutorial with id " + id });
+  //     else {
+  //       for (var key in req.body) {
+  //         if (req.body.hasOwnProperty(key)) {
+  //           if (req.body[key] == null) delete req.body[key];
+  //         }
+  //       }
+  //       res.send("Deleted successfully!");
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     res
+  //       .status(500)
+  //       .send({ message: "Error retrieving Tutorial with id=" + id });
+  //   });
+};
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {};
-
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {};
-
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {};
 
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {};
+
+// Add a project members
+exports.addMember = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params["projectId"]);
+    const user = await User.findById(req.params["userId"]);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    if (
+      project.members
+        .map((member) => member.user)
+        .includes(req.params["userId"])
+    ) {
+      return res.status(400).json({ msg: "Already member of board" });
+    }
+    // Add board to user's boards
+    user.projects.unshift(project.id);
+    await user.save();
+
+    project.members.push({ user: user.id, email: user.email, role: "normal" });
+    await project.save();
+    res.json(project.members);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+};

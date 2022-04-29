@@ -8,20 +8,24 @@ module.exports = (mongoose) => {
       end_date: { type: Date, require: true },
       description: { type: String, require: true },
       thumbnail: { type: String },
-      // members: [
-      //   {
-      //     _id: false,
-      //     user: {
-      //       type: Schema.Types.ObjectId,
-      //       ref: "users",
-      //     },
-
-      //     role: {
-      //       type: String,
-      //       default: "admin",
-      //     },
-      //   },
-      // ],
+      members: [
+        {
+          _id: false,
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "user",
+          },
+          email: {
+            type: String,
+            required: true,
+          },
+          role: {
+            type: String,
+            default: "admin",
+          },
+        },
+      ],
+      tasks: [{ type: mongoose.Schema.ObjectId, ref: "task" }],
       // owner: {type: Schema.ObjectId, ref: "user", require: true},
     },
     {

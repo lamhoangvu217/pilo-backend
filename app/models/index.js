@@ -9,4 +9,6 @@ db.url = dbConfig.url;
 db.board = require("./boards")(mongoose);
 db.user = require("./users")(mongoose);
 db.project = require("./projects")(mongoose);
+db.task = require("./tasks")(mongoose);
+db.list = require("./lists")(mongoose);
 module.exports = db;
