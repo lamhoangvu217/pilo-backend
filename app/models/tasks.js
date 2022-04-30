@@ -4,7 +4,7 @@ module.exports = (mongoose) => {
     name: { type: String, require: true },
     duedate: { type: Date, require: true },
     description: { type: String, require: true },
-    status: { type: Number, require: true },
+    status: { type: Number },
     members: [
       {
         _id: false,
@@ -15,6 +15,10 @@ module.exports = (mongoose) => {
         username: {
           type: String,
           required: true,
+        },
+        role: {
+          type: String,
+          default: "admin",
         },
       },
     ],

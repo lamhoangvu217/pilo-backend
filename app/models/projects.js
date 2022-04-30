@@ -25,7 +25,7 @@ module.exports = (mongoose) => {
           },
         },
       ],
-      tasks: [{ type: mongoose.Schema.ObjectId, ref: "task" }],
+      lists: [{ type: mongoose.Schema.ObjectId, ref: "list" }],
       // owner: {type: Schema.ObjectId, ref: "user", require: true},
     },
     {
