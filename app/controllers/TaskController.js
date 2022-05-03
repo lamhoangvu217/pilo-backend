@@ -2,6 +2,7 @@ const db = require("../models");
 const Task = db.task;
 const List = db.list;
 const User = db.user;
+const Project = db.project;
 exports.create = async (req, res) => {
   try {
     const newTask = new Task({
@@ -36,6 +37,56 @@ exports.findAll = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+exports.findAllByProjectId = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params["projectId"]);
+    const tasks = [];
+    for (const taskId of project.tasks) {
+      tasks.push(await Task.findById(taskId));
+    }
+    res.json(tasks);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
+};
+// edit name, description, duedate
+exports.editTask = async (req, res) => {
+  try {
+    const { name, description, duedate } = req.body;
+    if (name === "") {
+      return res.status(400).json({ msg: "Name is required" });
+    }
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+    task.name = name ? name : task.name;
+    if (description || description === "") {
+      task.description = description;
+    }
+    if (duedate || duedate == "") {
+      task.duedate = duedate;
+    }
+    await task.save();
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+};
+// Tien do cong viec
+exports.updateProgress = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ msg: "Task not found" });
+    }
+    task.progress = req.body.progress;
+    await task.save();
+    res.json(task);
+  } catch (error) {}
+};
 exports.findOne = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -45,6 +96,32 @@ exports.findOne = async (req, res) => {
     res.json(task);
   } catch (error) {
     console.log(error);
+    res.status(500).send("Server Error");
+  }
+};
+exports.addMember = async (req, res) => {
+  try {
+    const { taskId, userId } = req.params;
+    const task = await Task.findById(taskId);
+    const user = await User.findById(userId);
+    if (!task || !user) {
+      return res.status(404).json({ msg: "Card/user not found" });
+    }
+    const add = req.params["add"] === "true";
+    const members = task.members.map((member) => member.user);
+    const index = members.indexOf(userId);
+    if ((add && members.includes(userId)) || (!add && index === -1)) {
+      return res.json(task);
+    }
+    if (add) {
+      task.members.push({ user: user.id, username: user.username });
+    } else {
+      task.members.splice(index, 1);
+    }
+    await task.save();
+    res.json(task);
+  } catch (error) {
+    console.error(error);
     res.status(500).send("Server Error");
   }
 };

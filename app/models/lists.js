@@ -2,7 +2,7 @@ const { Schema } = require("mongoose");
 module.exports = (mongoose) => {
   var schema = mongoose.Schema({
     name: { type: String, require: true },
-    tasks: [{ type: mongoose.Schema.ObjectId, ref: "task" }],
+    tasks: [{ type: Schema.Types.ObjectId, ref: "task" }],
   });
   schema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();

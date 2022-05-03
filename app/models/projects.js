@@ -25,7 +25,7 @@ module.exports = (mongoose) => {
           },
         },
       ],
-      lists: [{ type: mongoose.Schema.ObjectId, ref: "list" }],
+      lists: [{ type: Schema.Types.ObjectId, ref: "list" }],
       // owner: {type: Schema.ObjectId, ref: "user", require: true},
     },
     {

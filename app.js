@@ -12,13 +12,14 @@ const userRoutes = require("./app/routes/user.routes");
 const projectRoutes = require("./app/routes/project.routes");
 const listRoutes = require("./app/routes/list.routes");
 const taskRoutes = require("./app/routes/task.routes");
+const checklistRoutes = require("./app/routes/checklist.routes");
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:3006",
+  origin: "*",
 };
 
 app.use(cors(corsOptions));
@@ -59,3 +60,4 @@ app.use("/api/user", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/lists", listRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/checklists", checklistRoutes);
