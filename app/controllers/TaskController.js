@@ -53,20 +53,13 @@ exports.findAllByProjectId = async (req, res) => {
 // edit name, description, duedate
 exports.editTask = async (req, res) => {
   try {
-    const { name, description, duedate } = req.body;
-    if (name === "") {
-      return res.status(400).json({ msg: "Name is required" });
-    }
+    const { description } = req.body;
     const task = await Task.findById(req.params.id);
     if (!task) {
       return res.status(404).json({ msg: "Task not found" });
     }
-    task.name = name ? name : task.name;
     if (description || description === "") {
       task.description = description;
-    }
-    if (duedate || duedate == "") {
-      task.duedate = duedate;
     }
     await task.save();
     res.json(task);

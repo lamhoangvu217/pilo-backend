@@ -7,5 +7,5 @@ router.post("/:listId", auth, task.create);
 router.get("/:id", auth, task.findOne);
 router.patch("/edit/:id", auth, task.editTask);
 router.patch("/progress/:id", auth, task.updateProgress);
-router.put("/addMember/:add/:taskId/:userId", auth, task.addMember);
+router.patch("/addMember/:add/:taskId/:userId", auth, task.addMember);
 module.exports = router;
