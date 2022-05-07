@@ -8,4 +8,5 @@ router.get("/:id", auth, task.findOne);
 router.patch("/edit/:id", auth, task.editTask);
 router.patch("/progress/:id", auth, task.updateProgress);
 router.patch("/addMember/:add/:taskId/:userId", auth, task.addMember);
+router.delete("/delete/:listId/:id", auth, task.delete);
 module.exports = router;

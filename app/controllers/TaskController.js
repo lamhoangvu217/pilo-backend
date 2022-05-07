@@ -118,3 +118,19 @@ exports.addMember = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+exports.delete = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    const list = await List.findById(req.params["listId"]);
+    if (!task || !list) {
+      return res.status(404).json({ msg: "List/task not found" });
+    }
+    list.tasks.splice(list.tasks.indexOf(req.params.id), 1);
+    await list.save();
+    await task.remove();
+    res.json(req.params.id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+};
