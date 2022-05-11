@@ -91,37 +91,25 @@ exports.findOne = (req, res) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.delete = async (req, res) => {
-  // const id = req.params.id;
-  // const user = await User.findById(req.user.id);
-  // user.projects.shift(id);
-  // await user.save();
-  // Project.findByIdAndRemove(id)
-  //   .then((data) => {
-  //     if (!data)
-  //       res.status(404).send({ message: "Not found Tutorial with id " + id });
-  //     else {
-  //       for (var key in req.body) {
-  //         if (req.body.hasOwnProperty(key)) {
-  //           if (req.body[key] == null) delete req.body[key];
-  //         }
-  //       }
-  //       res.send("Deleted successfully!");
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     res
-  //       .status(500)
-  //       .send({ message: "Error retrieving Tutorial with id=" + id });
-  //   });
+  try {
+    const project = await Project.findById(req.params.id);
+    const user = await User.findById(req.user.id);
+    if (!project || !user) {
+      return res.status(404).json({ msg: "Project/User not found" });
+    }
+    user.projects.splice(user.projects.indexOf(req.params.id), 1);
+    await user.save();
+    await project.remove();
+    res.json(user.projects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
 };
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {};
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {};
-
-// Find all published Tutorials
-exports.findAllPublished = (req, res) => {};
-
 // Add a project members
 exports.addMember = async (req, res) => {
   try {

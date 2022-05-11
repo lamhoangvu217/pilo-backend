@@ -11,7 +11,6 @@ router.get("/", auth, project.findAll);
 router.post("/", auth, project.create);
 
 // Retrieve all published project
-router.get("/published", auth, project.findAllPublished);
 
 // Retrieve a single Tutorial with id
 router.get("/:id", auth, project.findOne);
@@ -25,7 +24,5 @@ router.put("/:id", auth, project.update);
 // Delete a Tutorial with id
 router.delete("/:id", auth, project.delete);
 
-// Create a new Tutorial
-router.delete("/", auth, project.deleteAll);
 
 module.exports = router;

@@ -12,9 +12,11 @@ exports.create = async (req, res) => {
     });
     const task = await newTask.save();
     const list = await List.findById(req.params["listId"]);
-
+    const project = await Project.findById(req.params["projectId"]);
     list.tasks.push(task.id);
+    project.tasks.push(task.id);
     await list.save();
+    await project.save();
     res.json({ task: task, listId: list.id });
   } catch (error) {
     console.log(error);
@@ -120,7 +122,7 @@ exports.addMember = async (req, res) => {
 };
 exports.delete = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
+    const task = await Task.findById(req.params["taskId"]);
     const list = await List.findById(req.params["listId"]);
     if (!task || !list) {
       return res.status(404).json({ msg: "List/task not found" });
@@ -128,7 +130,7 @@ exports.delete = async (req, res) => {
     list.tasks.splice(list.tasks.indexOf(req.params.id), 1);
     await list.save();
     await task.remove();
-    res.json(req.params.id);
+    res.json(list.tasks);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
