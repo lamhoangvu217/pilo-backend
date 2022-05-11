@@ -26,6 +26,7 @@ exports.findAll = async (req, res) => {
     if (!list) {
       return res.status(404).json({ msg: "List not found" });
     }
+    console.log("hello")
     const tasks = [];
     for (const taskId of list.tasks) {
       tasks.push(await Task.findById(taskId));
