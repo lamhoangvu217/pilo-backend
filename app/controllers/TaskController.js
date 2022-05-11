@@ -12,11 +12,8 @@ exports.create = async (req, res) => {
     });
     const task = await newTask.save();
     const list = await List.findById(req.params["listId"]);
-    const project = await Project.findById(req.params["projectId"]);
     list.tasks.push(task.id);
-    project.tasks.push(task.id);
     await list.save();
-    await project.save();
     res.json({ task: task, listId: list.id });
   } catch (error) {
     console.log(error);
@@ -31,19 +28,6 @@ exports.findAll = async (req, res) => {
     }
     const tasks = [];
     for (const taskId of list.tasks) {
-      tasks.push(await Task.findById(taskId));
-    }
-    res.json(tasks);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Server Error");
-  }
-};
-exports.findAllByProjectId = async (req, res) => {
-  try {
-    const project = await Project.findById(req.params["projectId"]);
-    const tasks = [];
-    for (const taskId of project.tasks) {
       tasks.push(await Task.findById(taskId));
     }
     res.json(tasks);
