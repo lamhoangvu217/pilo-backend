@@ -10,6 +10,7 @@ exports.create = async (req, res) => {
       duedate: req.body.duedate,
       description: req.body.description,
     });
+    console.log("hihi")
     const task = await newTask.save();
     const list = await List.findById(req.params["listId"]);
     list.tasks.push(task.id);
